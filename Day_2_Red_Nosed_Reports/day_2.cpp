@@ -49,14 +49,30 @@ typedef unsigned long long int  uint64;
 
 /* clang-format on */
 
-void solve(vi l1, vi l2) {
-	sort(l1.begin(), l1.end()); 
-	sort(l2.begin(), l2.end());
-	int sol = 0;
-	for (int i = 0; i < l1.size(); i++) {
-		sol += abs(l1[i] - l2[i]);
+bool solve(vi l1) {
+	// check for increasing or decreasing
+	for (int i = 0; i < l1.size() - 1; i++) {
+		if ((abs(l1[i] - l1[i+1]) < 1) || (abs(l1[i] - l1[i+1]) > 3)) {
+			return false;
+		}
 	}
-	cout << sol << endl;
+	// if increasing
+	if (l1[0] > l1[1]) {
+		for (int i = 0; i < l1.size() - 1; i++) {
+			if (l1[i] < l1[i+1]) {
+				return false;
+			}
+		}
+	}
+	// if decreasing
+	else {
+		for (int i = 0; i < l1.size() - 1; i++) {
+			if (l1[i] > l1[i+1]) {
+				return false;
+			}
+		}
+	} 
+	return true;
 }
 
 /* Main()  function */
@@ -73,17 +89,24 @@ int main()
 	}
 
 	int num;
-	vi l1, l2;
-	while(inputFile >> num) {
-		l1.push_back(num);
+
+	string str;
+	int sol = 0;
+	while(getline(inputFile, str)) {
+		vi l1; 
+		istringstream ss(str);
 		//Grab second number
-		inputFile >> num;
-		l2.push_back(num);
+		while(ss >> num) {
+			l1.push_back(num);
+		}
+		if (solve(l1)) {
+			sol++;
+		}
+
 	}
 
-	solve(l1, l2);
 	
-	
+	cout << sol << endl;
 	inputFile.close();
 	return 0;
 }
