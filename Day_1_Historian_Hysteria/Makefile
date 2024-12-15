@@ -3,9 +3,10 @@ CXX = g++
 CXXFLAGS = -Wall -Wextra -pedantic -std=c++17
 
 # Source and target
-SRC = day_1.cpp
-TARGET = day_1
-
+#SRC = day_1.cpp
+#TARGET = day_1
+SRC = day_1_level_2.cpp
+TARGET = day_1_level_2
 # Rules
 all: $(TARGET)
 
