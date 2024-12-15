@@ -47,42 +47,55 @@ typedef long long int int64;
 typedef unsigned long long int  uint64;
 
 
+bool isSafe(vi sign_diff) {
+    // increasing when sign_diff[i] < 0
+    // decreasing when sign_diff[i] > 0
+    bool increasing, decreasing = false;
+    for (int i = 0; i < sign_diff.size(); i++) {
+        if (sign_diff[i] < 0) {
+            increasing = true;
+        }
+        if (sign_diff[i] > 0) {
+            decreasing = true;
+        }
+        if ((abs(sign_diff[i]) > 3) || (sign_diff[i] == 0)) {
+            return false;
+        }
+        if (increasing && decreasing) { 
+            return false;
+        }
+    }
+    if (increasing || decreasing) {
+        return true;
+    }
+    return false;
+}
+
 /* clang-format on */
 
-bool solve(vi sub_l1) {
-	bool valid = true;
-    bool decreasing = true;
-    bool increasing = true;
-	// check for increasing or decreasing by at least one and at most three
-	
-	for (int i = 0; i < sub_l1.size() - 1; i++) {
-		
-		if ((abs(sub_l1[i] - sub_l1[i+1]) < 1) || (abs(sub_l1[i] - sub_l1[i+1]) > 3)) {
-			valid = false;
-			break;
-		}
-	}
+bool solve(vi l1) {
+    // sign diff is an array of difference between
+    // n and n+1
+    // if all same sign and different by at least 1 and at most 3
+    // ==> safe
+    // Idea: recurr this for all sub array
+    for (int k = 0; k < l1.size(); k++) {
+        vi sign_diff;
+        vi sub_l1;
+        for (int i = 0 ; i < l1.size(); i++) {
+            if (i != k) {
+                sub_l1.push_back(l1[i]);
+            }    
+        }
+        //construct sign_diff
+        for (int i = 0; i < sub_l1.size() - 1; i++) {
+            sign_diff.push_back(sub_l1[i] - sub_l1[i+1]);
+        }
+        if (isSafe(sign_diff)) {
+            return true;
+        }
 
-	// check if decreasing
-	for (int i = 0; i < sub_l1.size() - 1; i++) {
-		if (sub_l1[i] < sub_l1[i+1]) {
-			decreasing = false;
-			break;
-		}
-	}
-	
-	// check if increasing
-	for (int i = 0; i < sub_l1.size() - 1; i++) {
-		if (sub_l1[i] > sub_l1[i+1]) {
-			increasing = false;
-			break;
-		}
-	}
-
-	if ((valid) && (increasing || decreasing)) {
-		return true;
-	}
-
+    }
     return false;
 }
 
@@ -113,7 +126,6 @@ int main()
 		if (solve(l1)) {
 			sol++;
 		}
-
 	}
 
 	
